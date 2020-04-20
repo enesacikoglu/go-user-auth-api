@@ -1,0 +1,11 @@
+# TODO Add New Profiles
+Local:
+  server:
+    port: :6161
+  database:
+    username: "SA"
+    password: "2010.ChampionTS61"
+    database: "master"
+    host: "localhost:1431"
+    maxOpenConnection: 5
+    maxIdleConnection: 2

@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: go-user-auth-api
+  name: go-user-auth-api
+  namespace: user
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600
+  selector:
+    matchLabels:
+      app: go-user-auth-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: go-user-auth-api
+    spec:
+      containers:
+      - name: go-user-auth-api
+        image: go-user-auth-api:{{version}}
+        ports:
+        - name: go-papi-port
+          containerPort: 6161
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: go-papi-port
+            scheme: HTTP
+          initialDelaySeconds: 10
+          timeoutSeconds: 3
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 4
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: go-papi-port
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+          periodSeconds: 1
+          successThreshold: 1
+          failureThreshold: 1
+        resources:
+          limits:
+            cpu: "1"
+            memory: "400Mi"
+          requests:
+            cpu: "200m"
+            memory: "100Mi"
+        imagePullPolicy: IfNotPresent
+        terminationMessagePath: "/prod/termination-log"
+        terminationMessagePolicy: File
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 15
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: "app"
+                  operator: In
+                  values:
+                  - "go-user-auth-api"

@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  sqlserver:
+    image: microsoft/mssql-server-linux:2017-latest
+    container_name: go-user-auth-mssql
+    hostname: 'sqlserver'
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: 2010.ChampionTS61
+      MSSQL_PID: Developer
+    ports:
+      - '1431:1433'

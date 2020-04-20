@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-user-auth-api
+  namespace: user
+spec:
+  type: NodePort
+  ports:
+    - port: 6161
+      targetPort: 6161
+      nodePort: 32561
+  selector:
+    app: go-user-auth-api

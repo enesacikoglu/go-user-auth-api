@@ -1,0 +1,703 @@
+definitions:
+  domain.ApplicationCreateRequest:
+    properties:
+      createdBy:
+        type: string
+      modifiedBy:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.ApplicationDto:
+    properties:
+      createdBy:
+        type: string
+      createdDate:
+        type: string
+      id:
+        type: integer
+      modifiedBy:
+        type: string
+      modifiedDate:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.PermissionCreateRequest:
+    properties:
+      createdBy:
+        type: string
+      modifiedBy:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.PermissionDto:
+    properties:
+      applicationId:
+        type: integer
+      createdBy:
+        type: string
+      createdDate:
+        type: string
+      id:
+        type: integer
+      modifiedBy:
+        type: string
+      modifiedDate:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.RoleCreateRequest:
+    properties:
+      createdBy:
+        type: string
+      modifiedBy:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.RoleDto:
+    properties:
+      createdBy:
+        type: string
+      createdDate:
+        type: string
+      id:
+        type: integer
+      modifiedBy:
+        type: string
+      modifiedDate:
+        type: string
+      name:
+        type: string
+      permissions:
+        items:
+          $ref: '#/definitions/domain.PermissionDto'
+        type: array
+    type: object
+  domain.RolePermissionCreateRequest:
+    properties:
+      applicationId:
+        type: integer
+      createdBy:
+        type: string
+      permissionId:
+        type: integer
+      roleId:
+        type: integer
+    type: object
+  domain.RolePermissionDto:
+    properties:
+      applicationId:
+        type: integer
+      createdBy:
+        type: string
+      createdDate:
+        type: string
+      id:
+        type: integer
+      permissionId:
+        type: integer
+      roleId:
+        type: integer
+    type: object
+  domain.UserCreateRequest:
+    properties:
+      createdBy:
+        type: string
+      email:
+        type: string
+      modifiedBy:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+  domain.UserDto:
+    properties:
+      createdBy:
+        type: string
+      createdDate:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      modifiedBy:
+        type: string
+      modifiedDate:
+        type: string
+      name:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/domain.RoleDto'
+        type: array
+      surname:
+        type: string
+    type: object
+  domain.UserRoleCreateRequest:
+    properties:
+      createdBy:
+        type: string
+      roleId:
+        type: integer
+      userId:
+        type: integer
+    type: object
+  domain.UserRoleDto:
+    properties:
+      createdBy:
+        type: string
+      createdDate:
+        type: string
+      id:
+        type: integer
+      roleId:
+        type: integer
+      userId:
+        type: integer
+    type: object
+  domain.UserUpdateRequest:
+    properties:
+      email:
+        type: string
+      modifiedBy:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Go User Auth Api ( Returns all user,permission and roles information
+    differs by application etc )
+  license: {}
+  title: Go-user-auth-api
+  version: "1.0"
+paths:
+  /applications:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.ApplicationDto'
+            type: array
+      summary: Get All Applications info
+      tags:
+      - application-controller
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ApplicationCreateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ApplicationCreateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201": {}
+      summary: Create Application
+      tags:
+      - application-controller
+  /applications/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Application Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ApplicationDto'
+      summary: Get Application Info by id
+      tags:
+      - application-controller
+  /permissions:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.PermissionDto'
+            type: array
+      summary: Get All Permissions info
+      tags:
+      - permission-controller
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: PermissionCreateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.PermissionCreateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Create Permission
+      tags:
+      - permission-controller
+  /permissions/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Permission Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204": {}
+      summary: Delete Permission by id
+      tags:
+      - permission-controller
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Permission Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.PermissionDto'
+      summary: Get Permission Info by id
+      tags:
+      - permission-controller
+  /role-permissions:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.RolePermissionDto'
+            type: array
+      summary: Get All RolePermissions info
+      tags:
+      - role-permission-controller
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: RolePermissionCreateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.RolePermissionCreateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201": {}
+      summary: Create Role Permission
+      tags:
+      - role-permission-controller
+  /role-permissions/{roleId}/permissions/{permissionId}/applications/{applicationId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Role Id
+        in: path
+        name: roleId
+        required: true
+        type: integer
+      - description: Application Id
+        in: path
+        name: permissionId
+        required: true
+        type: integer
+      - description: Application Id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204": {}
+      summary: Delete RolePermission by RoleId,PermissionId,ApplicationId
+      tags:
+      - role-permission-controller
+  /roles:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.RoleDto'
+            type: array
+      summary: Get All Roles info
+      tags:
+      - role-controller
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: RoleCreateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.RoleCreateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201": {}
+      summary: Create Role
+      tags:
+      - role-controller
+  /roles/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Role Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204": {}
+      summary: Delete Role by id
+      tags:
+      - role-controller
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Role Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.RoleDto'
+      summary: Get Role Info by id
+      tags:
+      - role-controller
+  /user-permissions:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: User email
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: Application Id
+        in: query
+        name: appId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.PermissionDto'
+            type: array
+      summary: Get UserPermission info by email and applicationId
+      tags:
+      - user-permission-controller
+  /user-roles:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.UserRoleDto'
+            type: array
+      summary: Get All UserRoles info
+      tags:
+      - user-role-controller
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserRoleCreateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserRoleCreateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201": {}
+      summary: Create UserRole
+      tags:
+      - user-role-controller
+  /user-roles/{userId}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.UserDto'
+      summary: Get User Role with Permissions
+      tags:
+      - user-role-controller
+  /user-roles/{userId}/roles/{roleId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Role Id
+        in: path
+        name: roleId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204": {}
+      summary: Delete UserRole by UserId and RoleId
+      tags:
+      - user-role-controller
+  /users:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.UserDto'
+            type: array
+      summary: Get All Users info
+      tags:
+      - user-controller
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserCreateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserCreateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201": {}
+      summary: Create User
+      tags:
+      - user-controller
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204": {}
+      summary: Delete User by id
+      tags:
+      - user-controller
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.UserDto'
+      summary: Get user info by id
+      tags:
+      - user-controller
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UserUpdateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserUpdateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Update User by id
+      tags:
+      - user-controller
+  /users/{id}/roles:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.RoleDto'
+            type: array
+      summary: Get User Roles by user id
+      tags:
+      - user-controller
+  /users/{userId}/roles/{roleId}/permissions:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Role Id
+        in: path
+        name: roleId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.PermissionDto'
+            type: array
+      summary: Get User Role Permission info
+      tags:
+      - user-controller
+  /users/email:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.UserDto'
+      summary: Get user info by email
+      tags:
+      - user-controller
+swagger: "2.0"

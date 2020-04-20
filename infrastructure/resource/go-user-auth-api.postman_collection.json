@@ -1,0 +1,373 @@
+{
+	"info": {
+		"_postman_id": "e9347751-b3e0-400a-b7cc-9670360d4d35",
+		"name": "go-user-auth-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"enes.acikoglu@gmail.come\",\n\"name\": \"Enes\",\n\"surname\": \"Acikoglu\",\n\"isActive\": false,\n\"createdBy\": \"enes.acikoglu@trendyol.com\",\n\"modifiedBy\": \"enes.acikoglu@trendyol.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6161/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreatePermission",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"enes.acikoglu@gmail.come\",\n\"name\": \"Enes\",\n\"surname\": \"Acikoglu\",\n\"isActive\": false,\n\"createdBy\": \"enes.acikoglu@trendyol.com\",\n\"modifiedBy\": \"enes.acikoglu@trendyol.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6161/permissions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserByEmail",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:6161/users?email=enes.acikoglu@trendyol.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "enes.acikoglu@trendyol.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserWithRoleAndPermissions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:6161/users?email=enes.acikoglu@trendyol.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "enes.acikoglu@trendyol.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeletePermission",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:6161/permissions/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"permissions",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteUserByEmail Copy",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:6161/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUser",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"enes.acikoglu@gmail.com\",\n\"name\": \"Enes\",\n\"surname\": \"Acikoglu\",\n\"isActive\": true,\n\"createdBy\": \"enes.acikoglu@trendyol.com\",\n\"modifiedBy\": \"enes.acikoglu@trendyol.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6161/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateRole",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"enes.acikoglu@gmail.come\",\n\"name\": \"Enes\",\n\"surname\": \"Acikoglu\",\n\"isActive\": false,\n\"createdBy\": \"enes.acikoglu@trendyol.com\",\n\"modifiedBy\": \"enes.acikoglu@trendyol.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6161/permissions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateApplication",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"name\": \"canCreateCampaign\",\n\"createdBy\": \"enes.acikoglu@trendyol.com\",\n\"modifiedBy\": \"enes.acikoglu@trendyol.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6161/applications",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"applications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateUserRole",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"enes.acikoglu@gmail.come\",\n\"name\": \"Enes\",\n\"surname\": \"Acikoglu\",\n\"isActive\": false,\n\"createdBy\": \"enes.acikoglu@trendyol.com\",\n\"modifiedBy\": \"enes.acikoglu@trendyol.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6161/permissions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateRolePermission",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"roleId\":\t4,\n\"permissionId\":\t3,\n\"createdBy\": \"gokhan.ozteke@trendyol.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6161/role-permissions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6161",
+					"path": [
+						"role-permissions"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
