@@ -21,9 +21,10 @@ func NewRoleRepository(mssqlConnection MSSqlConnection) *RoleRepositoryImp {
 	}
 }
 
-func (repository *RoleRepositoryImp) CreateRole(role domain.Role) error {
+func (repository *RoleRepositoryImp) CreateRole(role domain.Role) (int, error) {
 	insertPermissionQuery := `
 		INSERT INTO ROLES(Id,Name,CreatedBy, ModifiedBy, CreatedDate, ModifiedDate) 
+        OUTPUT Inserted.Id
         VALUES( NEXT VALUE FOR DBO.SEQ_ROLES,@name,@createdBy,@modifiedBy,GETUTCDATE(),GETUTCDATE())
 	`
 	ctx := context.Background()
@@ -31,21 +32,23 @@ func (repository *RoleRepositoryImp) CreateRole(role domain.Role) error {
 	prepareContext, err := repository.mssqlConnection.db.PrepareContext(ctx, insertPermissionQuery)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	defer prepareContext.Close()
 
-	_, err = prepareContext.Exec(sql.Named("name", role.Name),
-		sql.Named("createdBy", role.CreatedBy), sql.Named("modifiedBy", role.ModifiedBy))
+	var id = 0
+	err = prepareContext.QueryRow(sql.Named("name", role.Name),
+		sql.Named("createdBy", role.CreatedBy), sql.Named("modifiedBy", role.ModifiedBy)).
+		Scan(&id)
 
 	if err != nil {
 		sqlError := err.(mssql.Error)
 		log.Error(sqlError.Error())
-		return errors.InternalServerError(sqlError.Message)
+		return 0, errors.InternalServerError(sqlError.Message)
 	}
 
-	return nil
+	return id, nil
 }
 
 func (repository *RoleRepositoryImp) GetRoleById(id int) (*domain.Role, error) {

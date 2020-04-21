@@ -94,9 +94,15 @@ type CreateRoleCommand struct {
 	ModifiedBy string `json:"modifiedBy"`
 }
 
+type RoleCreatedEvent struct {
+	Id    int `json:"id"`
+}
+
 type DeleteRoleCommand struct {
 	Id    int `json:"id"`
 }
+
+type RoleDeletedEvent RoleCreatedEvent
 
 type ApplicationCreateRequest struct {
 	Name       string `json:"name"`

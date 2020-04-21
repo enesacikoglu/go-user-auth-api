@@ -10,7 +10,7 @@ import (
 	"go-user-auth-api/application/handler"
 	_ "go-user-auth-api/docs"
 	"go-user-auth-api/domain"
-	"go-user-auth-api/infrastructure/command_query_bus"
+	"go-user-auth-api/infrastructure/commandquerybus"
 	"go-user-auth-api/infrastructure/configuration"
 	"go-user-auth-api/infrastructure/errors"
 	"go-user-auth-api/infrastructure/repository"
@@ -31,7 +31,7 @@ func StartServer() {
 	msSqlConnection := repository.NewMSSqlConnection(databaseConfig)
 
 	//CommandQueryBus
-	commandQueryBus := command_query_bus.New()
+	commandQueryBus := commandquerybus.New()
 
 	//Error
 	e.HTTPErrorHandler = errors.CustomEchoHTTPErrorHandler

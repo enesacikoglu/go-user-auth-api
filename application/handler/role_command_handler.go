@@ -9,7 +9,6 @@ type RoleCommandHandler struct {
 	roleService application.RoleService
 }
 
-
 func NewRoleCommandHandler(roleService application.RoleService) *RoleCommandHandler {
 	return &RoleCommandHandler{
 		roleService: roleService,
@@ -18,13 +17,12 @@ func NewRoleCommandHandler(roleService application.RoleService) *RoleCommandHand
 
 func (handler *RoleCommandHandler) CreateRoleCommandHandler(command interface{}) (interface{}, error) {
 	createRoleCommand := command.(domain.CreateRoleCommand)
-	err := handler.roleService.CreateRole(createRoleCommand)
+	id, err := handler.roleService.CreateRole(createRoleCommand)
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return domain.RoleCreatedEvent{Id: id}, nil
 }
-
 
 func (handler *RoleCommandHandler) DeleteRoleCommandHandler(command interface{}) (interface{}, error) {
 	deleteRoleCommand := command.(domain.DeleteRoleCommand)
@@ -32,5 +30,5 @@ func (handler *RoleCommandHandler) DeleteRoleCommandHandler(command interface{})
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return domain.RoleDeletedEvent{Id: deleteRoleCommand.Id}, nil
 }

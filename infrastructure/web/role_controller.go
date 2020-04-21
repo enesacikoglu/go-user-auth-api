@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"go-user-auth-api/application/handler"
 	"go-user-auth-api/domain"
-	commandQueryHandler "go-user-auth-api/infrastructure/command_query_bus"
+	commandQueryHandler "go-user-auth-api/infrastructure/commandquerybus"
 	"net/http"
 	"strconv"
 )
@@ -38,10 +38,12 @@ func (controller *RoleController) CreateRole(c echo.Context) error {
 		return err
 	}
 
-	_, errors := controller.commandQueryHandler.Handle(command)
+	resp, errors := controller.commandQueryHandler.Handle(command)
 	if errors != nil {
 		return errors[0]
 	} else {
+		event := resp.(domain.RoleCreatedEvent)
+		c.Response().Header().Set("id", strconv.Itoa(event.Id))
 		return c.NoContent(201)
 	}
 }
@@ -75,10 +77,12 @@ func (controller *RoleController) GetRoleById(c echo.Context) error {
 // @Router /roles/{id} [delete]
 func (controller *RoleController) DeleteRoleById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	_, errors := controller.commandQueryHandler.Handle(domain.DeleteRoleCommand{Id: id})
+	resp, errors := controller.commandQueryHandler.Handle(domain.DeleteRoleCommand{Id: id})
 	if errors != nil {
 		return errors[0]
 	} else {
+		event := resp.(domain.RoleDeletedEvent)
+		c.Response().Header().Set("id", strconv.Itoa(event.Id))
 		return c.NoContent(204)
 	}
 }
