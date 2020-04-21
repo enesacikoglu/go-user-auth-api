@@ -15,7 +15,6 @@ First Run docker-compose up -d to start sqlserver
 
 Second run DDL under the infrastructure/resource/go_user_auth_api_schema.sql
 
-
 ## Swagger
 http://localhost:6161/swagger/index.html
 

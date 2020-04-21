@@ -1,7 +1,6 @@
 package application
 
 import (
-
 	"fmt"
 	"go-user-auth-api/application/repository"
 	"go-user-auth-api/domain"
@@ -9,7 +8,7 @@ import (
 )
 
 type RoleService interface {
-	CreateRole(request domain.RoleCreateRequest) error
+	CreateRole(request domain.CreateRoleCommand) (int, error)
 	GetRoleById(id int) (*domain.RoleDto, error)
 	GetAll() ([]domain.RoleDto, error)
 	DeleteRoleById(id int) error
@@ -23,17 +22,17 @@ func NewRoleServiceImp(repository repository.RoleRepository) *RoleServiceImp {
 	return &RoleServiceImp{repository: repository}
 }
 
-func (roleService *RoleServiceImp) CreateRole(request domain.RoleCreateRequest) error {
+func (roleService *RoleServiceImp) CreateRole(request domain.CreateRoleCommand) (int, error) {
 	role := domain.Role{
 		Name:       request.Name,
 		CreatedBy:  request.CreatedBy,
 		ModifiedBy: request.ModifiedBy,
 	}
-	err := roleService.repository.CreateRole(role)
-	if err != nil {
-		return err
+	id, err := roleService.repository.CreateRole(role)
+	if err != nil && id != 0 {
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 func (roleService *RoleServiceImp) GetRoleById(id int) (*domain.RoleDto, error) {

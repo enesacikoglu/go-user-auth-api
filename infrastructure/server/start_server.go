@@ -7,7 +7,10 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/swaggo/echo-swagger"
 	"go-user-auth-api/application"
+	"go-user-auth-api/application/handler"
 	_ "go-user-auth-api/docs"
+	"go-user-auth-api/domain"
+	"go-user-auth-api/infrastructure/commandquerybus"
 	"go-user-auth-api/infrastructure/configuration"
 	"go-user-auth-api/infrastructure/errors"
 	"go-user-auth-api/infrastructure/repository"
@@ -26,6 +29,9 @@ func StartServer() {
 	config := configuration.NewConfigurationManager()
 	databaseConfig := config.GetDatabaseConfig()
 	msSqlConnection := repository.NewMSSqlConnection(databaseConfig)
+
+	//CommandQueryBus
+	commandQueryBus := commandquerybus.New()
 
 	//Error
 	e.HTTPErrorHandler = errors.CustomEchoHTTPErrorHandler
@@ -64,7 +70,16 @@ func StartServer() {
 	//RoleController
 	roleRepository := repository.NewRoleRepository(*msSqlConnection)
 	roleServiceImp := application.NewRoleServiceImp(roleRepository)
-	roleController := web.NewRoleController(roleServiceImp)
+
+	queryHandler := handler.NewRoleQueryHandler(roleServiceImp)
+	commandQueryBus.RegisterQueryHandler(handler.GetRoleByIdQuery{}, queryHandler.GetRoleByIdQueryHandler)
+	commandQueryBus.RegisterQueryHandler(handler.GetAllRolesQuery{}, queryHandler.GetAllRolesQueryQueryHandler)
+
+	commandHandler := handler.NewRoleCommandHandler(roleServiceImp)
+	commandQueryBus.RegisterCommandHandler(domain.CreateRoleCommand{}, commandHandler.CreateRoleCommandHandler)
+	commandQueryBus.RegisterCommandHandler(domain.DeleteRoleCommand{}, commandHandler.DeleteRoleCommandHandler)
+
+	roleController := web.NewRoleController(*commandQueryBus)
 	roleController.Register(e)
 
 	//ApplicationController
