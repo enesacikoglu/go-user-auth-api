@@ -88,10 +88,14 @@ type UserRoleCreateRequest struct {
 	CreatedBy string `json:"createdBy"`
 }
 
-type RoleCreateRequest struct {
+type CreateRoleCommand struct {
 	Name       string `json:"name"`
 	CreatedBy  string `json:"createdBy"`
 	ModifiedBy string `json:"modifiedBy"`
+}
+
+type DeleteRoleCommand struct {
+	Id    int `json:"id"`
 }
 
 type ApplicationCreateRequest struct {
@@ -112,7 +116,7 @@ type RolePermissionCreateRequest struct {
 	ApplicationId int    `json:"applicationId"`
 }
 
-type RoleUpdateRequest RoleCreateRequest
+type RoleUpdateRequest CreateRoleCommand
 
 type PermissionCreateRequest struct {
 	Name       string `json:"name" valid:"required~Name can not be blank"`
@@ -188,7 +192,7 @@ func (a ApplicationUpdateRequest) Validate() error {
 	return nil
 }
 
-func (r RoleCreateRequest) Validate() error {
+func (r CreateRoleCommand) Validate() error {
 	if !govalidator.IsNotNull(r.Name) {
 		return errors.BadRequest("Name cannot be empty")
 	}

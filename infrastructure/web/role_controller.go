@@ -2,19 +2,20 @@ package web
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-user-auth-api/application"
+	"go-user-auth-api/application/handler"
 	"go-user-auth-api/domain"
+	commandQueryHandler "go-user-auth-api/infrastructure/command_query_bus"
 	"net/http"
 	"strconv"
 )
 
 type RoleController struct {
-	service application.RoleService
+	commandQueryHandler commandQueryHandler.Handler
 }
 
-func NewRoleController(service application.RoleService) *RoleController {
+func NewRoleController(commandQueryHandler commandQueryHandler.Handler) *RoleController {
 	return &RoleController{
-		service: service,
+		commandQueryHandler: commandQueryHandler,
 	}
 }
 
@@ -27,24 +28,23 @@ func NewRoleController(service application.RoleService) *RoleController {
 // @Success 201
 // @Router /roles [post]
 func (controller *RoleController) CreateRole(c echo.Context) error {
-	var roleRequest domain.RoleCreateRequest
-	err := c.Bind(&roleRequest)
+	var command domain.CreateRoleCommand
+	err := c.Bind(&command)
 	if err != nil {
 		return err
 	}
 
-	if err := roleRequest.Validate(); err != nil {
+	if err := command.Validate(); err != nil {
 		return err
 	}
 
-	err = controller.service.CreateRole(roleRequest)
-	if err != nil {
-		return err
+	_, errors := controller.commandQueryHandler.Handle(command)
+	if errors != nil {
+		return errors[0]
 	} else {
 		return c.NoContent(201)
 	}
 }
-
 
 // GetRoleById godoc
 // @tags role-controller
@@ -56,14 +56,14 @@ func (controller *RoleController) CreateRole(c echo.Context) error {
 // @Router /roles/{id} [get]
 func (controller *RoleController) GetRoleById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	role, err := controller.service.GetRoleById(id)
+	role, err := controller.commandQueryHandler.Handle(handler.GetRoleByIdQuery{Id: id})
+	//	role, err := controller.service.GetRoleById(id)
 	if err != nil {
-		return err
+		return err[0]
 	} else {
 		return c.JSON(http.StatusOK, role)
 	}
 }
-
 
 // DeleteRoleById godoc
 // @tags role-controller
@@ -75,14 +75,13 @@ func (controller *RoleController) GetRoleById(c echo.Context) error {
 // @Router /roles/{id} [delete]
 func (controller *RoleController) DeleteRoleById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	err := controller.service.DeleteRoleById(id)
-	if err != nil {
-		return err
+	_, errors := controller.commandQueryHandler.Handle(domain.DeleteRoleCommand{Id: id})
+	if errors != nil {
+		return errors[0]
 	} else {
 		return c.NoContent(204)
 	}
 }
-
 
 // GetAll godoc
 // @tags role-controller
@@ -92,9 +91,9 @@ func (controller *RoleController) DeleteRoleById(c echo.Context) error {
 // @Success 200 {array} domain.RoleDto
 // @Router /roles [get]
 func (controller *RoleController) GetAll(c echo.Context) error {
-	roles, err := controller.service.GetAll()
+	roles, err := controller.commandQueryHandler.Handle(handler.GetAllRolesQuery{})
 	if err != nil {
-		return err
+		return err[0]
 	} else {
 		return c.JSON(http.StatusOK, roles)
 	}

@@ -9,7 +9,7 @@ import (
 )
 
 type RoleService interface {
-	CreateRole(request domain.RoleCreateRequest) error
+	CreateRole(request domain.CreateRoleCommand) error
 	GetRoleById(id int) (*domain.RoleDto, error)
 	GetAll() ([]domain.RoleDto, error)
 	DeleteRoleById(id int) error
@@ -23,7 +23,7 @@ func NewRoleServiceImp(repository repository.RoleRepository) *RoleServiceImp {
 	return &RoleServiceImp{repository: repository}
 }
 
-func (roleService *RoleServiceImp) CreateRole(request domain.RoleCreateRequest) error {
+func (roleService *RoleServiceImp) CreateRole(request domain.CreateRoleCommand) error {
 	role := domain.Role{
 		Name:       request.Name,
 		CreatedBy:  request.CreatedBy,
