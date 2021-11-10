@@ -1,5 +1,5 @@
 # TODO Add New Profiles
-Local:
+dev:
   server:
     port: :6161
   database:

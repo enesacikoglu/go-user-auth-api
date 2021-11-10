@@ -11,9 +11,9 @@ go build main.go
 
 ## Run 
 
-First Run docker-compose up -d to start sqlserver
-
-Second run DDL under the infrastructure/resource/go_user_auth_api_schema.sql
+* **First**:  Run docker-compose up -d to start sqlserver
+* **Second**:  Run DDL under the infrastructure/resource/go_user_auth_api_schema.sql on your local sql(works on docker)
+* **Last**:  Start main.go
 
 ## Swagger
 http://localhost:6161/swagger/index.html
